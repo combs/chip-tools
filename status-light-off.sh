@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo i2cset -f -y 0 0x34 0x93 0x0
+
