@@ -19,7 +19,7 @@ then
   echo "just root stuff ok"
 fi
 
-cd ~$HOSTUSER
+cd /home/$HOSTUSER
 
 if [ "$HOSTNAME" == "" ]
 then
