@@ -9,8 +9,7 @@ BOLD="`tput bold` `tput setaf 4`"
 UNBOLD="`tput rmso` `tput setaf 0`"
 
 logger() {
-echo "$BOLD$@ $UNBOLD"
-
+  echo "$BOLD$@ $UNBOLD"
 }
 
 if [ "$UID" -ne "0" ]
@@ -114,6 +113,7 @@ then
   scp -r $MASTERUSER@$MASTERHOST:/etc/init.d/axp209 /etc/init.d/
   scp -r $MASTERUSER@$MASTERHOST:/root/.axp209 /root/
   /etc/init.d/axp209 start
+  sudo update-rc.d ax209 defaults
 fi
 
 crontab -u root -l > /tmp/crontab.root
@@ -124,7 +124,7 @@ grep git-puller /tmp/crontab.$HOSTUSER || ( logger adding git-puller.sh to $HOST
 
 
 logger install packages...
-apt-get -y install python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet
+apt-get -y install python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer
 logger update packages...
 apt-get -y dist-upgrade
 
