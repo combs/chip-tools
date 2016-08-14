@@ -116,6 +116,13 @@ then
   /etc/init.d/axp209 start
 fi
 
+crontab -u root -l > /tmp/crontab.root
+grep backup /tmp/crontab.root || ( logger adding backup to crontab... ; echo -e "\n# m h  dom mon dow   command\n0 5 * * 1 /home/chip/git/chip-tools/backup.sh" >> /tmp/crontab.root; crontab /tmp/crontab.root; rm /tmp/crontab.root )
+
+crontab -u $HOSTUSER -l > /tmp/crontab.$HOSTUSER
+grep git-puller /tmp/crontab.$HOSTUSER || ( logger adding git-puller.sh to $HOSTUSER crontab... ; echo -e "\n# m h  dom mon dow   command\n25 5,9,13,17,21,1 * * 1 /home/chip/git/chip-tools/git-puller.sh" >> /tmp/crontab.$HOSTUSER; crontab -u $HOSTUSER /tmp/crontab.$HOSTUSER; rm /tmp/crontab.$HOSTUSER )
+
+
 logger install packages...
 apt-get -y install python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet
 logger update packages...
