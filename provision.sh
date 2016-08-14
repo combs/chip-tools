@@ -124,7 +124,7 @@ grep git-puller /tmp/crontab.$HOSTUSER || ( logger adding git-puller.sh to $HOST
 
 
 logger install packages...
-apt-get -y install python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer unzip
+apt-get -y install python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer unzip gettext
 logger update packages...
 apt-get -y dist-upgrade
 
