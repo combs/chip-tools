@@ -128,4 +128,4 @@ apt-get -y install python3 psutils aptitude build-essential git autoconf libtool
 logger update packages...
 apt-get -y dist-upgrade
 
-logger Hmm that's all I got
+logger Hmm that\'s all I got
