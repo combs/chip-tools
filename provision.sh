@@ -30,8 +30,8 @@ fi
 if [ ! -e /home/$HOSTUSER/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa ]
 then
   logger getting key... please enter password:
-  scp -r $MASTERUSER@$MASTERHOST:$MASTERHOME.ssh ~/
-  scp -r $MASTERUSER@$MASTERHOST:$MASTERHOME.ssh ~$HOSTUSER/
+  scp -r $MASTERUSER@$MASTERHOST:$MASTERHOME.ssh /root/
+  scp -r $MASTERUSER@$MASTERHOST:$MASTERHOME.ssh /home/$HOSTUSER/
   logger perms for ssh keys...
   chown -R $HOSTUSER /home/$HOSTUSER/.ssh
   chmod 700 /home/$HOSTUSER/.ssh
