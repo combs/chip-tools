@@ -1,11 +1,14 @@
 import CHIP_IO.GPIO as GPIO
 
 def switches_setup():
-	GPIO.setup("U14_13", GPIO.IN)
-	GPIO.setup("U14_14", GPIO.IN)
-	GPIO.setup("U14_15", GPIO.IN)
-	GPIO.setup("U14_16", GPIO.IN)
-	GPIO.setup("U14_17", GPIO.IN)
+	try:
+		GPIO.setup("U14_13", GPIO.IN)
+		GPIO.setup("U14_14", GPIO.IN)
+		GPIO.setup("U14_15", GPIO.IN)
+		GPIO.setup("U14_16", GPIO.IN)
+		GPIO.setup("U14_17", GPIO.IN)
+	except RuntimeError:
+		pass
 
 def switches_read():
 	value = 0
