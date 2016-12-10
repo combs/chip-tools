@@ -1,5 +1,4 @@
 import CHIP_IO.GPIO as GPIO
-import fb
 
 def switches_setup():
 	GPIO.setup("U14_13", GPIO.IN)
