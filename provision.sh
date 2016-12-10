@@ -52,6 +52,9 @@ fi
 logger updating packages...
 apt-get update
 
+logger requirements...
+apt-get install -y figlet git
+
 logger timezone...
 # dpkg-reconfigure tzdata
 scp -r $MASTERUSER@$MASTERHOST:/etc/localtime /etc/
@@ -60,6 +63,9 @@ logger locales...
 apt-get -y install locales
 scp -r $MASTERUSER@$MASTERHOST:/etc/locale.gen /etc/
 /usr/sbin/locale-gen
+localectl set-locale LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
 logger hostname...
 
 grep Debian /etc/motd > /dev/null
@@ -124,7 +130,7 @@ grep git-puller /tmp/crontab.$HOSTUSER || ( logger adding git-puller.sh to $HOST
 
 
 logger install packages...
-apt-get -y install i2c-tools python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer unzip gettext
+apt-get -y install i2c-tools python-pip python3-pip python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer unzip gettext
 logger update packages...
 apt-get -y dist-upgrade
 
