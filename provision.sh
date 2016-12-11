@@ -102,6 +102,19 @@ chown -R $HOSTUSER git
 # passwd -l $HOSTUSER
 # passwd -l root
 
+
+if [ ! -e /usr/local/etc/blink.cfg ]
+then
+  logger blink...
+  sudo wget -O /usr/local/bin/blink.sh http://fordsfords.github.io/blink/blink.sh
+  sudo chmod +x /usr/local/bin/blink.sh
+  sudo wget -O /etc/systemd/system/blink.service http://fordsfords.github.io/blink/blink.service
+  curl http://fordsfords.github.io/blink/blink.cfg | sed -e 's/BLINK_STATUS=1/BLINK_STATUS=0/' > /usr/local/etc/blink.cfg
+  ln -s /usr/local/etc/blink.cfg /etc/blink.cfg
+  sudo systemctl enable /etc/systemd/system/blink.service
+  
+fi
+
 logger adding nopasswd to sudoers...
 echo '%sudo ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/nopasswd
 chmod 0440 /etc/sudoers.d/nopasswd
@@ -130,7 +143,7 @@ grep git-puller /tmp/crontab.$HOSTUSER || ( logger adding git-puller.sh to $HOST
 
 
 logger install packages...
-apt-get -y install i2c-tools python-pip python3-pip python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer unzip gettext
+apt-get -y install i2c-tools psmisc python-pip python3-pip python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer unzip gettext
 logger update packages...
 apt-get -y dist-upgrade
 
