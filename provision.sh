@@ -78,9 +78,12 @@ fi
 grep EDITOR ~/.profile > /dev/null || ( logger adding EDITOR to ~/.profile... ; echo -e '\nexport EDITOR=nano\n' >> ~/.profile )
 grep EDITOR /home/$HOSTUSER/.profile > /dev/null || ( logger adding EDITOR to /home/HOSTUSER/.profile... ;echo -e '\nexport EDITOR=nano\n' >> /home/$HOSTUSER/.profile )
 
+logger fw_env.config...
+
+echo '/dev/mtdblock3 0x0000 0x400000 0x4000'>/etc/fw_env.config
 
 logger git repos...
-cd ~HOSTUSER
+cd /home/$HOSTUSER
 mkdir git 2>/dev/null
 cd git
 logger chip-tools
@@ -112,7 +115,7 @@ then
   curl http://fordsfords.github.io/blink/blink.cfg | sed -e 's/BLINK_STATUS=1/BLINK_STATUS=0/' > /usr/local/etc/blink.cfg
   ln -s /usr/local/etc/blink.cfg /etc/blink.cfg
   sudo systemctl enable /etc/systemd/system/blink.service
-  
+
 fi
 
 logger adding nopasswd to sudoers...
@@ -143,7 +146,7 @@ grep git-puller /tmp/crontab.$HOSTUSER || ( logger adding git-puller.sh to $HOST
 
 
 logger install packages...
-apt-get -y install i2c-tools psmisc python-pip python3-pip python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer unzip gettext
+apt-get -y install i2c-tools psmisc python-pip python3-pip python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python3.4 python3-pip figlet htop ffmpeg mplayer unzip gettext moreutils
 logger update packages...
 apt-get -y dist-upgrade
 
