@@ -4,6 +4,9 @@ FILENAME=$BASENAME.`date +%Y%m%d`.tgz
 DESTINATIONHOST="batman.local"
 DESTINATIONUSER="combs"
 DESTINATIONPATH="/Users/combs/Dropbox/Targets/Foton-Backups/"
+if [ -e /etc/chip-backup.conf ]
+	then . /etc/chip-backup.conf
+fi
 
 apt-get clean
 
