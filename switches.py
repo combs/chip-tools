@@ -1,13 +1,12 @@
 import CHIP_IO.GPIO as GPIO
 
 def switches_setup():
+	ports=["U14_13","U14_14","U14_15","U14_16"]
+	for port in ports:
 	try:
-		GPIO.setup("U14_13", GPIO.IN)
-		GPIO.setup("U14_14", GPIO.IN)
-		GPIO.setup("U14_15", GPIO.IN)
-		GPIO.setup("U14_16", GPIO.IN)
-		GPIO.setup("U14_17", GPIO.IN)
+		GPIO.setup(port, GPIO.IN)
 	except RuntimeError:
+		print("Couldn't set up port",port)
 		pass
 
 def switches_read():
@@ -22,5 +21,7 @@ def switches_read():
 		value = value + 8
 	return value
 
-switches_setup()
-print(switches_read())
+if __name__ == '__main__':
+	# test code
+	switches_setup()
+	print(switches_read())
