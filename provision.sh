@@ -27,6 +27,12 @@ then
   exit
 fi
 
+logger updating packages...
+apt-get update
+
+logger requirements...
+apt-get install -y figlet git avahi-daemon avahi-utils libnss-mdns
+
 if [ ! -e /home/$HOSTUSER/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa ]
 then
   logger getting key... please enter password:
@@ -48,12 +54,6 @@ logger fetching network connections...
 scp -r $MASTERUSER@$MASTERHOST:/etc/NetworkManager/system-connections/ /etc/NetworkManager/
 fi
 
-
-logger updating packages...
-apt-get update
-
-logger requirements...
-apt-get install -y figlet git
 
 logger timezone...
 # dpkg-reconfigure tzdata
