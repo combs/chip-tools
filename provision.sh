@@ -150,4 +150,8 @@ apt-get -y install i2c-tools psmisc python-pip python3-pip python3 psutils aptit
 logger update packages...
 apt-get -y dist-upgrade
 
+logger git configuration...
+sudo -u $HOSTUSER git config --global user.email "$HOSTUSER@$HOSTNAME"
+git config --global user.name "$HOSTUSER@$HOSTNAME"
+
 logger Hmm that\'s all I got
