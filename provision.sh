@@ -152,6 +152,6 @@ apt-get -y dist-upgrade
 
 logger git configuration...
 sudo -u $HOSTUSER git config --global user.email "$HOSTUSER@$HOSTNAME"
-git config --global user.name "$HOSTUSER@$HOSTNAME"
+sudo -u $HOSTUSER git config --global user.name "$HOSTUSER@$HOSTNAME"
 
 logger Hmm that\'s all I got
