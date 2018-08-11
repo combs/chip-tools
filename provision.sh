@@ -31,7 +31,7 @@ logger updating packages...
 apt-get update
 
 logger requirements...
-apt-get install -y figlet git avahi-daemon avahi-utils libnss-mdns
+apt-get install -y figlet git avahi-daemon avahi-utils libnss-mdns anacron
 
 if [ ! -e /home/$HOSTUSER/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa ]
 then
@@ -142,8 +142,11 @@ then
   sudo update-rc.d ax209 defaults
 fi
 
-crontab -u root -l > /tmp/crontab.root
-grep backup /tmp/crontab.root || ( logger adding backup to crontab... ; echo -e "\n# m h  dom mon dow   command\n0 5 * * 1 /home/chip/git/chip-tools/backup.sh" >> /tmp/crontab.root; crontab /tmp/crontab.root; rm /tmp/crontab.root )
+# crontab -u root -l > /tmp/crontab.root
+# grep backup /tmp/crontab.root || ( logger adding backup to crontab... ; echo -e "\n# m h  dom mon dow   command\n0 5 * * 1 /home/$HOSTUSER/git/chip-tools/backup.sh" >> /tmp/crontab.root; crontab /tmp/crontab.root; rm /tmp/crontab.root )
+
+ln -s /home/$HOSTUSER/git/chip-tools/backup.sh /etc/cron.weekly/backup
+chown root:root /home/$HOSTUSER/git/chip-tools/backup.sh
 
 crontab -u $HOSTUSER -l > /tmp/crontab.$HOSTUSER
 grep git-puller /tmp/crontab.$HOSTUSER || ( logger adding git-puller.sh to $HOSTUSER crontab... ; echo -e "\n# m h  dom mon dow   command\n25 5,9,13,17,21,1 * * 1 /home/chip/git/chip-tools/git-puller.sh" >> /tmp/crontab.$HOSTUSER; crontab -u $HOSTUSER /tmp/crontab.$HOSTUSER; rm /tmp/crontab.$HOSTUSER )
