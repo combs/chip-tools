@@ -31,18 +31,25 @@ fi
 logger replacing NTC apt repository...
 sed -i 's/opensource.nextthing.co/chip.jfpossibilities.com/gi' /etc/apt/sources.list
 
+
+
+logger adding experimental repo...
+echo 'deb http://ftp.debian.org/debian experimental main contrib non-free' > /etc/apt/sources.list.d/experimental.list
+
+grep jessie /etc/apt/sources.list > /dev/null
+if [ "$?" == "0" ]
+then
+logger adding archived jessie-backports repo...
+echo -e 'deb http://archive.debian.org/debian/ jessie-backports main contrib non-free\ndeb-src http://archive.debian.org/debian/ jessie-backports main contrib non-free' > /etc/apt/sources.list.d/archived-jessie-backports.list
 logger disabling apt key checks b/c jessie-backports...
+echo -e 'Acquire::Check-Valid-Until "false";\nAPT::Get::AllowUnauthenticated "true";' > /etc/apt/apt.conf.d/jessie-backports.conf
 
-echo 'Acquire::Check-Valid-Until "false";' >> /etc/apt/apt.conf.d/jessie-backports.conf
-
-
-
-
+fi
 logger updating packages...
 apt-get update
 
 logger requirements...
-apt-get install -y figlet git avahi-daemon avahi-utils libnss-mdns anacron || exit
+apt-get install -y figlet git avahi-daemon avahi-utils libnss-mdns anacron debian-archive-keyring rsync || exit
 
 
 if [ ! -e /home/$HOSTUSER/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa ]
@@ -145,6 +152,9 @@ logger setting hostname...
 echo $HOSTNAME > /etc/hostname
 cat /etc/hosts | sed -e "s/127.0.0.1.*chip.*/127.0.0.1 $HOSTNAME/" > /tmp/hostname && cat /tmp/hostname > /etc/hosts && rm /tmp/hostname
 
+dmesg | grep axp20x > /dev/null
+if [ "$?" == "0" ]
+then
 if [ ! -d /root/.axp209 ]
 then
   logger setting up axp209 daemon...
@@ -152,6 +162,7 @@ then
   scp -r $MASTERUSER@$MASTERHOST:/root/.axp209 /root/
   /etc/init.d/axp209 start
   sudo update-rc.d ax209 defaults
+fi
 fi
 
 # crontab -u root -l > /tmp/crontab.root
@@ -169,6 +180,14 @@ apt-get -y install i2c-tools psmisc python-pip python3-pip python3 psutils aptit
 logger update packages...
 apt-get -y dist-upgrade
 
+lsmod | grep 8723bs > /dev/null
+
+if [ "$?" == "0" ]
+then
+    logger C.H.I.P. 802.11 detected. disabling mac randomization for debian stretch  ... 
+    echo -e '[connection]\nwifi.mac-address-randomization=1\n\n[device]\nwifi.scan-rand-mac-address=no' > /etc/NetworkManager/conf.d/no-mac-randomization.conf 
+fi
+
 logger double check for uimage...
 if [ ! -f "/boot/initrd.uimage" ]
 then
@@ -178,6 +197,30 @@ UIMAGE=`echo $IMG | sed -e 's:img:uimage:'`
 DESCRIPTION=`echo $IMG | sed -e 's:.img::'`
 mkimage -A arm -T ramdisk -C none -n "$DESCRIPTION" -d "$IMG" "$UIMAGE"
 ln -sf "$UIMAGE" initrd.uimage
+fi
+
+
+grep jessie /etc/apt/sources.list > /dev/null
+if [ "$?" == "0" ]
+then
+    logger upgrade to debian stretch...
+    rm /etc/apt/sources.list.d/archived-jessie-backports.list
+    sed -i 's/jessie/stretch/g' /etc/apt/sources.list
+    echo -e '\n\ndeb http://deb.debian.org/debian stretch main\ndeb-src http://deb.debian.org/debian stretch main\n\ndeb http://deb.debian.org/debian-security/ stretch/updates main\ndeb-src http://deb.debian.org/debian-security/ stretch/updates main\n\ndeb http://deb.debian.org/debian stretch-updates main\ndeb-src http://deb.debian.org/debian stretch-updates main' >> /etc/apt/sources.list
+    # this is silly and duplicative, but the updates line differs
+
+    apt-get update
+    apt-get -y dist-upgrade
+fi
+
+grep stretch /etc/apt/sources.list > /dev/null
+
+if [ "$?" == "0" ]
+then
+    logger upgrade to debian buster...
+    sed -i 's/stretch/buster/g' /etc/apt/sources.list
+    apt-get update
+    apt-get -y dist-upgrade
 fi
 
 logger Hmm that\'s all I got
