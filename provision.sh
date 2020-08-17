@@ -27,6 +27,10 @@ then
   exit
 fi
 
+
+logger replacing NTC apt repository...
+sed -i 's/opensource.nextthing.co/chip.jfpossibilities.com/gi' /etc/apt/sources.list
+
 logger updating packages...
 apt-get update
 
@@ -156,5 +160,16 @@ logger install packages...
 apt-get -y install i2c-tools psmisc python-pip python3-pip python3 psutils aptitude build-essential git autoconf libtool libdaemon-dev libasound2-dev libpopt-dev libconfig-dev libavahi-client-dev libssl-dev libsoxr-dev zlib1g-dev zlib1g python-dev python3.4 python3-pip figlet htop ffmpeg mplayer unzip gettext moreutils htop
 logger update packages...
 apt-get -y dist-upgrade
+
+logger double check for uimage...
+if [ ! -f "/boot/initrd.uimage" ]
+then
+cd /boot
+IMG=`ls initrd.img* | tail -1`
+UIMAGE=`echo $IMG | sed -e 's:img:uimage:'`
+DESCRIPTION=`echo $IMG | sed -e 's:.img::'`
+mkimage -A arm -T ramdisk -C none -n "$DESCRIPTION" -d "$IMG" "$UIMAGE"
+ln -sf "$UIMAGE" initrd.uimage
+fi
 
 logger Hmm that\'s all I got
