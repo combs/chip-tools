@@ -31,11 +31,19 @@ fi
 logger replacing NTC apt repository...
 sed -i 's/opensource.nextthing.co/chip.jfpossibilities.com/gi' /etc/apt/sources.list
 
+logger disabling apt key checks b/c jessie-backports...
+
+echo 'Acquire::Check-Valid-Until "false";' >> /etc/apt/apt.conf.d/jessie-backports.conf
+
+
+
+
 logger updating packages...
 apt-get update
 
 logger requirements...
-apt-get install -y figlet git avahi-daemon avahi-utils libnss-mdns anacron
+apt-get install -y figlet git avahi-daemon avahi-utils libnss-mdns anacron || exit
+
 
 if [ ! -e /home/$HOSTUSER/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa ]
 then
